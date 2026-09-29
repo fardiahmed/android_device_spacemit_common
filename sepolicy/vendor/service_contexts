@@ -1,0 +1,2 @@
+# minigbm's stable-C mapper service.
+mapper/minigbm    u:object_r:hal_graphics_mapper_service:s0
