@@ -42,3 +42,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_VENDOR_PROPERTIES += \
     ro.hdmi.device_type=4
 endif
+
+# Miracast sink app (vendor/spacemit/apps/WfdSink); needs Wi-Fi Direct and the H.264 decoder.
+SPACEMIT_WFD_SINK ?= true
+ifeq ($(SPACEMIT_WFD_SINK),true)
+PRODUCT_PACKAGES += \
+    WfdSink
+endif
