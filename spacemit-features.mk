@@ -63,3 +63,15 @@ ifeq ($(SPACEMIT_MIC_TEST),true)
 PRODUCT_PACKAGES += \
     MicTest
 endif
+
+# On-device LLM: llama-server/cli/bench and the AI Chat app (vendor/spacemit/ai/llama, vendor/spacemit/apps/AiChat).
+SPACEMIT_LLM ?= true
+ifeq ($(SPACEMIT_LLM),true)
+PRODUCT_PACKAGES += \
+    llama-server \
+    llama-cli \
+    llama-bench \
+    AiChat
+PRODUCT_VENDOR_PROPERTIES += \
+    persist.vendor.llm.enable=1
+endif

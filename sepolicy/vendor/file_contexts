@@ -82,3 +82,8 @@
 # Codec2 service for the VPU (vendor/spacemit/hardware/codec2): runs in the stock mediacodec
 # (hal_codec2_server) domain, which already allows video_device and gpu_device access.
 /vendor/bin/hw/android\.hardware\.media\.c2-service\.k1-v4l2    u:object_r:mediacodec_exec:s0
+
+# On-device LLM server (vendor/spacemit/ai/llama) and its models
+/vendor/bin/llama-server                                        u:object_r:llama_server_exec:s0
+/data/vendor/llm(/.*)?                                          u:object_r:llm_data_file:s0
+/data/vendor/llm-log(/.*)?                                      u:object_r:llm_log_file:s0

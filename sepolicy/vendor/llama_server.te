@@ -1,0 +1,29 @@
+# On-device LLM server; router mode spawns one child per model.
+type llama_server, domain;
+type llama_server_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(llama_server)
+net_domain(llama_server)
+
+# Models: /data/vendor/llm/*.gguf (memory-mapped).
+type llm_data_file, file_type, data_file_type;
+allow llama_server llm_data_file:dir r_dir_perms;
+allow llama_server llm_data_file:file { r_file_perms map };
+
+# Log: /data/vendor/llm-log/llama-server.log (--log-file).
+type llm_log_file, file_type, data_file_type;
+allow llama_server llm_log_file:dir rw_dir_perms;
+allow llama_server llm_log_file:file create_file_perms;
+
+# Children: posix_spawn of /vendor/bin/llama-server.
+allow llama_server llama_server_exec:file execute_no_trans;
+
+# HTTP on 8080 (router) and ephemeral loopback ports (children).
+allow llama_server self:tcp_socket { create_stream_socket_perms listen accept bind };
+allow llama_server port:tcp_socket name_bind;
+allow llama_server node:tcp_socket node_bind;
+
+# The ggml SpacemiT backend finds the IME ("A60") cores from marchid in /proc/cpuinfo.
+allow llama_server proc_cpuinfo:file r_file_perms;
+
+# persist.vendor.llm.enable / persist.vendor.llm.host (read by init for the service).
+vendor_internal_prop(vendor_llm_prop)
