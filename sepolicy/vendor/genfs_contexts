@@ -1,0 +1,14 @@
+# SoC-independent sysfs/proc labels. Board-specific paths live in <soc>/sepolicy/vendor/genfs_contexts.
+
+# DRM virtual devices — needed by SurfaceFlinger / hwc-drm for connector hotplug
+genfscon sysfs /devices/virtual/drm                                         u:object_r:sysfs_gpu:s0
+
+# Power supply / battery (sysfs_batteryinfo is the AOSP type for /class/power_supply)
+genfscon sysfs /class/power_supply                                          u:object_r:sysfs_batteryinfo:s0
+
+# Thermal
+genfscon sysfs /class/thermal                                               u:object_r:sysfs_thermal:s0
+genfscon sysfs /devices/virtual/thermal                                     u:object_r:sysfs_thermal:s0
+
+# proc
+genfscon proc /sys/vm/swappiness                                            u:object_r:proc_dirty:s0

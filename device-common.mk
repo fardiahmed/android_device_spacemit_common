@@ -151,21 +151,6 @@ PRODUCT_PACKAGES += \
     hwservicemanager \
     android.hidl.allocator@1.0-service
 
-# Fstab
-PRODUCT_PACKAGES += \
-    fstab.k1 \
-    fstab.k1.vendor_ramdisk
-
-# Init
-PRODUCT_COPY_FILES += \
-    device/spacemit/k1/init.k1.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.k1.rc \
-    device/spacemit/k1/init.k1.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.k1.usb.rc \
-    device/spacemit/k1/ueventd.k1.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc
-
-# GPU firmware (PowerVR)
-PRODUCT_COPY_FILES += \
-    device/spacemit/k1/firmware/powervr/rogue_36.29.52.182_v1.fw:$(TARGET_COPY_OUT_VENDOR)/firmware/powervr/rogue_36.29.52.182_v1.fw
-
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.ipsec_tunnels.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.ipsec_tunnels.xml \
@@ -184,8 +169,8 @@ PRODUCT_COPY_FILES += \
 
 # Audio configuration
 PRODUCT_COPY_FILES += \
-    device/spacemit/k1/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
-    device/spacemit/k1/audio/primary_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/primary_audio_policy_configuration.xml \
+    device/spacemit/common/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
+    device/spacemit/common/audio/primary_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/primary_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
     frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
     frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
@@ -205,7 +190,6 @@ PRODUCT_COPY_FILES += \
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
-    device/spacemit/k1 \
     hardware/baylibre/usb \
     hardware/baylibre/audio \
     hardware/baylibre/thermal
@@ -225,4 +209,35 @@ PRODUCT_PACKAGES += webview_riscv64
 # Storage: for factory reset protection feature
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.frp.pst=/dev/block/by-name/frp
-    
+
+# Overlays (stay-on, no lockscreen, navigation bar -- dev defaults for boards on a monitor).
+# SPACEMIT_AUTO_ROTATE (spacemit-features.mk) appends overlay-autorotate after this one.
+DEVICE_PACKAGE_OVERLAYS := device/spacemit/common/overlay
+
+# ============================================================
+# External USB camera support
+# ============================================================
+PRODUCT_PACKAGES += \
+    android.hardware.camera.provider-V1-external-service
+
+PRODUCT_COPY_FILES += \
+    device/spacemit/common/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml \
+    frameworks/native/data/etc/android.hardware.camera.external.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.external.xml \
+    frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml
+
+# Codec2: use AIDL HAL so that app processes (e.g. scrcpy) can discover
+# software codecs via IComponentStore/software instead of relying on the
+# in-process ApexCodecs path that only works in system processes.
+PRODUCT_PROPERTY_OVERRIDES += \
+    media.c2.hal.selection=aidl \
+    debug.stagefright.c2inputsurface=-1
+
+# Vendor seccomp policy extension for media.swcodec.
+# Allows syscalls needed by Mesa/Zink GPU init (sched_getaffinity, epoll, etc.)
+# triggered via AHardwareBuffer_isSupported inside the mediaswcodec sandbox.
+PRODUCT_COPY_FILES += \
+    device/spacemit/common/seccomp_policy/mediaswcodec.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediaswcodec.policy
+
+# Soong namespaces for Mesa prebuilts and gbm_mesa_wrapper
+PRODUCT_SOONG_NAMESPACES += vendor/spacemit/hardware/mesa
+PRODUCT_SOONG_NAMESPACES += external/minigbm/gbm_mesa_driver
