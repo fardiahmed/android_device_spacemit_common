@@ -31,3 +31,14 @@ PRODUCT_SOONG_NAMESPACES += \
 PRODUCT_PACKAGES += \
     android.hardware.media.c2-service.k1-v4l2
 endif
+
+# HDMI-CEC as a playback device (K1 cec-gpio + vendor/spacemit/hardware/hdmi HAL).
+SPACEMIT_HDMI_CEC ?= true
+ifeq ($(SPACEMIT_HDMI_CEC),true)
+PRODUCT_PACKAGES += \
+    android.hardware.tv.hdmi-service.k1
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.hdmi.cec.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.hdmi.cec.xml
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.hdmi.device_type=4
+endif
