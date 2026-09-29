@@ -50,6 +50,10 @@ endif
 ifeq ($(SPACEMIT_QUIET_BOOT),true)
 BOARD_KERNEL_CMDLINE += loglevel=4
 endif
+# SPACEMIT_DEVKMSG_UNLIMITED=true: no /dev/kmsg ratelimit (recovery debugging).
+ifeq ($(SPACEMIT_DEVKMSG_UNLIMITED),true)
+BOARD_KERNEL_CMDLINE += printk.devkmsg=on
+endif
 # BOARD_KERNEL_CMDLINE += androidboot.first_stage_console=1
 
 
