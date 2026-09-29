@@ -49,3 +49,10 @@ ifeq ($(SPACEMIT_WFD_SINK),true)
 PRODUCT_PACKAGES += \
     WfdSink
 endif
+
+# ExoPlayer demo app (vendor/spacemit/apps/ExoPlayer prebuilt).
+SPACEMIT_EXOPLAYER ?= true
+ifeq ($(SPACEMIT_EXOPLAYER),true)
+PRODUCT_PACKAGES += \
+    ExoPlayerDemo
+endif
