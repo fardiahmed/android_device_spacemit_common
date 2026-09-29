@@ -56,3 +56,10 @@ ifeq ($(SPACEMIT_EXOPLAYER),true)
 PRODUCT_PACKAGES += \
     ExoPlayerDemo
 endif
+
+# Mic Test app (vendor/spacemit/apps/MicTest) for the built-in microphones.
+SPACEMIT_MIC_TEST ?= true
+ifeq ($(SPACEMIT_MIC_TEST),true)
+PRODUCT_PACKAGES += \
+    MicTest
+endif
