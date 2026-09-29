@@ -39,10 +39,13 @@ PRODUCT_PACKAGES += \
     update_verifier \
     checkpoint_gc
 
-# Boot control
+# Boot control: the HAL only ships in its vendor APEX on Android 16.
 PRODUCT_PACKAGES += \
-    android.hardware.boot-service.default \
+    com.android.hardware.boot \
     android.hardware.boot-service.default_recovery
+
+# bootctl CLI to inspect/set the A/B slot state.
+PRODUCT_PACKAGES_DEBUG += bootctl
 
 # Fastboot
 PRODUCT_PACKAGES += \
