@@ -266,3 +266,6 @@ PRODUCT_COPY_FILES += \
 # Soong namespaces for Mesa prebuilts and gbm_mesa_wrapper
 PRODUCT_SOONG_NAMESPACES += vendor/spacemit/hardware/mesa
 PRODUCT_SOONG_NAMESPACES += external/minigbm/gbm_mesa_driver
+
+# Uncompressed APEXes: no size gain here, and first boot skips decompression.
+PRODUCT_COMPRESSED_APEX := false
