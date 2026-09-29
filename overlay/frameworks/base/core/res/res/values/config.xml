@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The panel has no hardware Back/Home/Recents keys: show the navigation bar (on this
+         large-screen tablet configuration it is the Launcher3 taskbar with the 3 buttons). -->
+    <bool name="config_showNavigationBar">true</bool>
+
+    <!-- Jack/HDMI hot-plug events come from ALSA jack input devices (SW_LINEOUT/SW_VIDEOOUT/
+         SW_HEADPHONE/SW_MICROPHONE), not from extcon/switch uevents. -->
+    <bool name="config_useDevInputEventForAudioJack">true</bool>
+</resources>
