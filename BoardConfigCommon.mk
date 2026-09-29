@@ -46,6 +46,10 @@ BOARD_KERNEL_CMDLINE += console=ttyS0,115200
 BOARD_KERNEL_CMDLINE += earlycon=sbi earlycon=uart8250,mmio32,0xd4017000
 BOARD_KERNEL_CMDLINE += earlyprintk
 endif
+# SPACEMIT_QUIET_BOOT=true: loglevel=4, the polled UART console costs seconds of boot.
+ifeq ($(SPACEMIT_QUIET_BOOT),true)
+BOARD_KERNEL_CMDLINE += loglevel=4
+endif
 # BOARD_KERNEL_CMDLINE += androidboot.first_stage_console=1
 
 
