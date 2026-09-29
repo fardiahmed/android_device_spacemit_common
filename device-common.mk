@@ -61,9 +61,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     com.android.hardware.usb.generic
 
-# Audio HAL (BayLibre generic)
+# Audio HAL: BayLibre generic APEX plus the Bluetooth audio VINTF fragment (audio/).
 PRODUCT_PACKAGES += \
-    com.android.hardware.audio.generic
+    com.spacemit.hardware.audio
 
 PRODUCT_PACKAGES += \
     tinyplay2 \

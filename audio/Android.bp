@@ -1,0 +1,15 @@
+// BayLibre audio APEX plus the Bluetooth audio VINTF fragment it lacks (A2DP).
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+override_apex {
+    name: "com.spacemit.hardware.audio",
+    base: "com.android.hardware.audio.generic",
+    // Same list as the base APEX (hardware/baylibre/audio/apex/...) + the BT fragment.
+    prebuilts: [
+        "android.hardware.audio.service-aidl.generic.rc",
+        "android.hardware.audio.service-aidl.generic.xml",
+        "android.hardware.bluetooth.audio.xml",
+    ],
+}
