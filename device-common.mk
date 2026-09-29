@@ -106,9 +106,9 @@ PRODUCT_PACKAGES += \
     vulkan_mesa_icd \
     libgbm_mesa_wrapper
 
+# persist.demo.rotationlock is set by SPACEMIT_AUTO_ROTATE (spacemit-features.mk).
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.opengles.version=196608 \
-    persist.demo.rotationlock=1
+    ro.opengles.version=196608
 
 PRODUCT_PACKAGES += \
     zink_dri \

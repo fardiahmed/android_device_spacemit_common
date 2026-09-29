@@ -21,3 +21,7 @@ vendor.hwc.drm.internal_display_names  u:object_r:vendor_graphics_prop:s0 exact 
 # On-device LLM server (vendor/spacemit/ai/llama/llama-server.rc)
 persist.vendor.llm.enable   u:object_r:vendor_llm_prop:s0 exact bool
 persist.vendor.llm.host     u:object_r:vendor_llm_prop:s0 exact string
+# Sensors HAL (vendor/spacemit/hardware/sensors)
+ro.vendor.sensors.i2c_bus   u:object_r:vendor_sensors_prop:s0 exact string
+ro.vendor.sensors.i2c_sysfs u:object_r:vendor_sensors_prop:s0 exact string
+ro.vendor.sensors.imu.axes  u:object_r:vendor_sensors_prop:s0 exact string

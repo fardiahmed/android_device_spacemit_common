@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPACEMIT_AUTO_ROTATE (device.mk): Auto-rotate on by default (Settings.System
+     ACCELEROMETER_ROTATION), driven by the header IMU's accelerometer. -->
+<resources>
+    <bool name="def_accelerometer_rotation">true</bool>
+</resources>

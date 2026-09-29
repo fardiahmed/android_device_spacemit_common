@@ -1,0 +1,16 @@
+# Sensors HAL (vendor/spacemit/hardware/sensors), running as the stock hal_sensors_default.
+# Header I2C4 sensor modules: the IMU through i2c-dev, AHT20/BMP280 through their drivers' sysfs.
+
+# /dev/i2c-4 (MPU-9250/6500 and its AK8963 magnetometer, I2C_RDWR ioctls)
+type header_i2c_device, dev_type;
+allow hal_sensors_default header_i2c_device:chr_file rw_file_perms;
+
+# /sys/devices/platform/soc/d4012800.i2c/...: hwmon (AHT20) and IIO (BMP280) attributes
+type sysfs_header_sensors, sysfs_type, fs_type;
+allow hal_sensors_default sysfs_header_sensors:dir r_dir_perms;
+allow hal_sensors_default sysfs_header_sensors:file r_file_perms;
+allow hal_sensors_default sysfs_header_sensors:lnk_file read;
+
+# ro.vendor.sensors.i2c_bus / i2c_sysfs / imu.axes
+vendor_internal_prop(vendor_sensors_prop)
+get_prop(hal_sensors_default, vendor_sensors_prop)

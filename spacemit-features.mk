@@ -75,3 +75,32 @@ PRODUCT_PACKAGES += \
 PRODUCT_VENDOR_PROPERTIES += \
     persist.vendor.llm.enable=1
 endif
+
+# Sensors HAL for the header I2C4 modules (MPU-9250 IMU, AHT20, BMP280).
+SPACEMIT_SENSORS ?= true
+ifeq ($(SPACEMIT_SENSORS),true)
+PRODUCT_PACKAGES += \
+    android.hardware.sensors-service.spacemit
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.accelerometer.xml \
+    frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.gyroscope.xml \
+    frameworks/native/data/etc/android.hardware.sensor.compass.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.compass.xml \
+    frameworks/native/data/etc/android.hardware.sensor.barometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.barometer.xml \
+    frameworks/native/data/etc/android.hardware.sensor.ambient_temperature.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.ambient_temperature.xml \
+    frameworks/native/data/etc/android.hardware.sensor.relative_humidity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.relative_humidity.xml
+# Auto-rotation from the accelerometer; when off, the screen is locked landscape
+# (persist.demo.rotationlock).
+SPACEMIT_AUTO_ROTATE ?= true
+ifeq ($(SPACEMIT_AUTO_ROTATE),true)
+DEVICE_PACKAGE_OVERLAYS += device/spacemit/common/overlay-autorotate
+endif
+
+# IMU axis remap for a rotated module, e.g. "-y,x,z".
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.vendor.sensors.imu.axes=x,y,z
+endif
+
+ifneq ($(SPACEMIT_SENSORS)-$(SPACEMIT_AUTO_ROTATE),true-true)
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.demo.rotationlock=1
+endif
