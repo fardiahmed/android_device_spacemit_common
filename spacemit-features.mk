@@ -6,3 +6,18 @@
 
 # Optional features (SPACEMIT_<NAME>, true/false), defaults with ?=. A SoC device.mk forces
 # unsupported ones off with := before inheriting this file (last).
+
+# microG (Play services replacement) from vendor/microg.
+SPACEMIT_MICROG ?= true
+ifeq ($(SPACEMIT_MICROG),true)
+$(call inherit-product-if-exists, vendor/microg/microg.mk)
+endif
+
+# AVF (crosvm, virtmgr): needs the RISC-V H extension, off by default (K1 has none).
+SPACEMIT_AVF_ENABLED ?= false
+ifeq ($(SPACEMIT_AVF_ENABLED),true)
+PRODUCT_AVF_ENABLED := true
+else
+PRODUCT_AVF_ENABLED := false
+PRODUCT_AVF_REMOTE_ATTESTATION_DISABLED := true
+endif
