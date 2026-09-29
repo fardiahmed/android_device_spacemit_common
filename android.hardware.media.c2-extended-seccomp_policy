@@ -10,3 +10,5 @@ pselect6: 1
 sched_getaffinity: 1
 setsockopt: 1
 sysinfo: 1
+# Mesa (via minigbm gbm_mesa) calls riscv_hwprobe.
+riscv_hwprobe: 1
