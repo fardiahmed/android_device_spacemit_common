@@ -202,8 +202,9 @@ PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/a2dp_in_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_in_audio_policy_configuration_7_0.xml \
     frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml \
-    hardware/baylibre/audio/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects_config.xml \
-    hardware/baylibre/audio/mixer_controls.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_controls.xml
+    hardware/baylibre/audio/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects_config.xml
+
+# mixer_controls.xml is per board (SoC device.mk): PRODUCT_COPY_FILES is first-wins.
 
 # Media codecs
 PRODUCT_COPY_FILES += \
@@ -269,3 +270,5 @@ PRODUCT_SOONG_NAMESPACES += external/minigbm/gbm_mesa_driver
 
 # Uncompressed APEXes: no size gain here, and first boot skips decompression.
 PRODUCT_COMPRESSED_APEX := false
+
+# preloaded-classes override: see early-overrides.mk (must be inherited before full_base.mk).
