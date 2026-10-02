@@ -13,7 +13,7 @@ usage() {
 usage: $(basename "$0") <k1|k3> [options] [-- <m arguments>]
 
   k1                    BananaPi BPI-F3 (+ MusePi Pro bootloader)
-  k3                    BananaPi BPI-SM10 (no bootloader sources yet)
+  k3                    BananaPi BPI-SM10 (K3-CoM260)
 
 options:
   -p, --product NAME    lunch product (default: aosp_bananapi_f3_tablet / aosp_bananapi_sm10_tablet)
@@ -83,7 +83,7 @@ case "${soc}" in
     k3)
         product="${product:-aosp_bananapi_sm10_tablet}"
         kleaf_target="//devices/spacemit/bananapi_sm10:spacemit_k3_dist"
-        bl_boards=()
+        bl_boards=(bananapi-sm10)
         ;;
     *) usage >&2; die "choose k1 or k3" ;;
 esac
