@@ -90,3 +90,11 @@
 
 # Sensors HAL (vendor/spacemit/hardware/sensors); the board labels its header I2C node itself
 /vendor/bin/hw/android\.hardware\.sensors-service\.spacemit     u:object_r:hal_sensors_default_exec:s0
+
+# OP-TEE: TEE devices, tee-supplicant and its secure storage on persist, KeyMint/Gatekeeper HALs
+/dev/tee[0-9]+                                                  u:object_r:tee_device:s0
+/dev/teepriv[0-9]+                                              u:object_r:tee_device:s0
+/vendor/bin/tee-supplicant                                      u:object_r:tee_exec:s0
+/mnt/vendor/persist/tee(/.*)?                                   u:object_r:tee_data_file:s0
+/vendor/bin/hw/android\.hardware\.security\.keymint-service\.optee  u:object_r:hal_keymint_default_exec:s0
+/vendor/bin/hw/android\.hardware\.gatekeeper-service\.optee     u:object_r:hal_gatekeeper_default_exec:s0

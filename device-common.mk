@@ -80,13 +80,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     com.android.hardware.power
 
-# KeyMint (software, no TEE)
-PRODUCT_PACKAGES += \
-    com.android.hardware.keymint.rust_nonsecure
-
-# Gatekeeper (software, no TEE — required for FBE /data encryption)
-PRODUCT_PACKAGES += \
-    com.android.hardware.gatekeeper.nonsecure
+# KeyMint and Gatekeeper: SPACEMIT_OPTEE (spacemit-features.mk)
 
 # Graphics - HWComposer + Gralloc
 PRODUCT_PACKAGES += \

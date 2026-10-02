@@ -1,0 +1,11 @@
+# OP-TEE client daemon: loads the TAs from /vendor/lib/optee_armtz and serves their secure storage.
+# Started before late-fs: KeyMint (early_hal) needs it to unlock /data.
+on post-fs
+    mkdir /mnt/vendor/persist/tee 0770 system system
+    start vendor.tee-supplicant
+
+service vendor.tee-supplicant /vendor/bin/tee-supplicant
+    class early_hal
+    user system
+    group system
+    shutdown critical

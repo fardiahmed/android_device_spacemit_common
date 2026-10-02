@@ -1,0 +1,4 @@
+# tee-supplicant: TAs from /vendor/lib/optee_armtz, secure storage in /mnt/vendor/persist/tee
+allow tee mnt_vendor_file:dir search;
+allow tee vendor_file:dir r_dir_perms;
+allow tee vendor_file:file r_file_perms;

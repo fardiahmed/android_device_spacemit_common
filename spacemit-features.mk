@@ -22,6 +22,29 @@ PRODUCT_AVF_ENABLED := false
 PRODUCT_AVF_REMOTE_ATTESTATION_DISABLED := true
 endif
 
+# KeyMint and Gatekeeper in OP-TEE (vendor/spacemit/hardware/optee_keymint, TAs built by build.sh
+# into vendor/spacemit/k1/optee). Off: software KeyMint/Gatekeeper, no TEE.
+SPACEMIT_OPTEE ?= true
+ifeq ($(SPACEMIT_OPTEE),true)
+PRODUCT_PACKAGES += \
+    tee-supplicant \
+    android.hardware.security.keymint-service.optee \
+    android.hardware.gatekeeper-service.optee
+# KeyMint starts before /data is mounted: keep the TA secure storage on persist.
+$(call soong_config_set,optee_client,cfg_tee_fs_parent_path,/mnt/vendor/persist/tee)
+SPACEMIT_OPTEE_TAS := $(wildcard vendor/spacemit/k1/optee/*.ta)
+ifeq ($(SPACEMIT_OPTEE_TAS),)
+$(warning SPACEMIT_OPTEE: no TA in vendor/spacemit/k1/optee, build them with ./build.sh k1)
+endif
+PRODUCT_COPY_FILES += \
+    $(foreach ta,$(SPACEMIT_OPTEE_TAS),$(ta):$(TARGET_COPY_OUT_VENDOR)/lib/optee_armtz/$(notdir $(ta))) \
+    device/spacemit/common/init.optee.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.optee.rc
+else
+PRODUCT_PACKAGES += \
+    com.android.hardware.keymint.rust_nonsecure \
+    com.android.hardware.gatekeeper.nonsecure
+endif
+
 # Hardware codecs on the Linlon-V5 VPU (amvx) via external/v4l2_codec2.
 SPACEMIT_HW_CODEC2 ?= true
 ifeq ($(SPACEMIT_HW_CODEC2),true)

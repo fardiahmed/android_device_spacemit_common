@@ -67,6 +67,11 @@ BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOT_HEADER_VERSION) --pagesize
 
 # Bootconfig
 BOARD_BOOTCONFIG += androidboot.load_modules_parallel=true
+# Software KeyMint/Gatekeeper APEXes when they are not in OP-TEE (spacemit-features.mk).
+ifneq ($(SPACEMIT_OPTEE),true)
+BOARD_BOOTCONFIG += androidboot.vendor.apex.com.android.hardware.keymint=com.android.hardware.keymint.rust_nonsecure
+BOARD_BOOTCONFIG += androidboot.vendor.apex.com.android.hardware.gatekeeper=com.android.hardware.gatekeeper.nonsecure
+endif
 BOARD_BOOTCONFIG += androidboot.logcat.buffersize=4M
 # GKI
 BOARD_USES_GENERIC_KERNEL_IMAGE := true
