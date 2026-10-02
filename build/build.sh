@@ -35,6 +35,7 @@ environment:
 outputs:
   kernel      device/spacemit/<soc>-kernel/mainline
   bootloader  vendor/spacemit/{k1,musepi-pro}/bootloader
+  TAs         vendor/spacemit/k1/optee (KeyMint/Gatekeeper, with the bootloader)
   images      out/target/product/<device>
 EOF
 }
@@ -148,6 +149,31 @@ build_bootloader() {
         OMP_NUM_THREADS="${jobs:-$(nproc)}" "${release_sh}" --aosp="${TOP}" --mode=release \
             --config="${BL_DIR}/build-bootloaders/config/boards/${board}.yaml"
     done
+    build_tas
+}
+
+# KeyMint/Gatekeeper TAs, built with the TA dev kit of the OP-TEE build (same signing key).
+build_tas() {
+    local devkit="${BL_DIR}/out/${bl_boards[0]}/release/optee/export-ta_rv64"
+    local src="${TOP}/vendor/spacemit/hardware/optee_keymint"
+    local dest="${TOP}/vendor/spacemit/${soc}/optee" out ta cc
+    [ -d "${devkit}" ] || { echo "no OP-TEE TA dev kit: TAs skipped"; return 0; }
+    [ -d "${src}" ] || die "${src} is not synced (repo sync)"
+    cc=$(compgen -G "${BL_DIR}/toolchains/riscv64-lp64d--glibc--*/bin/riscv64-buildroot-linux-gnu-gcc" | tail -1)
+    [ -n "${cc}" ] || die "riscv64 toolchain missing in ${BL_DIR}/toolchains (built with the bootloader)"
+    step "TAs: keymaster gatekeeper"
+    mkdir -p "${dest}"
+    rm -f "${dest}"/*.ta
+    for ta in keymaster gatekeeper; do
+        out="${BL_DIR}/out/${bl_boards[0]}/release/ta/${ta}"
+        rm -rf "${out}"
+        # The TAs use the GP 1.1 TEE API (uint32_t sizes).
+        make -C "${src}/${ta}/ta" -j"${jobs:-$(nproc)}" TA_DEV_KIT_DIR="${devkit}" O="${out}" \
+            CROSS_COMPILE="${cc%gcc}" PYTHON3="$(command -v python3)" \
+            CFG_TA_OPTEE_CORE_API_COMPAT_1_1=y
+        cp "${out}"/*.ta "${dest}/"
+    done
+    echo "TAs staged in ${dest#"${TOP}"/}"
 }
 
 build_android() {
