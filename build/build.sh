@@ -188,7 +188,8 @@ build_android() {
     m "${m_args[@]}" || exit $?
 }
 
-[ "${do_kernel}" = true ] && build_kernel
-[ "${do_bootloader}" = true ] && build_bootloader
-[ "${do_android}" = true ] && build_android
+# Not "[ ] && step": set -e is ignored in && lists, so a failed step would not stop the build.
+if [ "${do_kernel}" = true ]; then build_kernel; fi
+if [ "${do_bootloader}" = true ]; then build_bootloader; fi
+if [ "${do_android}" = true ]; then build_android; fi
 step "done"
